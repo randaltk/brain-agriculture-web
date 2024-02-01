@@ -56,4 +56,14 @@ export const fetchCulturePieChart = async () => {
   const response = await api.get("/producers/dashboard/culture-pie-chart");
   return response.data;
 };
+
+export const fetchStatePieChart = async () => {
+  const response = await api.get("/producers/dashboard/state-pie-chart");
+  return response.data;
+};
+
+export const fetchLandUsePieChart = async () => {
+  const response = await api.get("/producers/dashboard/land-use-pie-chart");
+  return response.data;
+};
 export default api;

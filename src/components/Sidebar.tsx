@@ -5,10 +5,8 @@ const Sidebar = () => {
   return (
     <>
       <header>
-        <div className="logo" >
-          <Link href="/">
-            Brain Agriculture
-          </Link>
+        <div className="logo">
+          <Link href="/">Brain Agriculture</Link>
         </div>
         <div className="navigation">
           <Link href="/producers">Produtores</Link>

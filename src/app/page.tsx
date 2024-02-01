@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <div className={styles.description}>
-        <h1>Brain Agriculture</h1>
+        <h1>Brain Agriculture - Dashboards</h1>
       </div>
 
       <Dashboard />
