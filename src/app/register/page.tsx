@@ -1,6 +1,6 @@
 "use client";
 
-import CreateProducerForm from "@/components/CreateProducerForm";
+import CreateProducerForm from "@/components/producer-form/ProducerForm";
 
 const Register = () => {
   return (

@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Producer } from "@/interfaces";
 import { getProducerById, updateProducer } from "@/services/api";
-import CreateProducerForm from "@/components/CreateProducerForm";
+import CreateProducerForm from "@/components/producer-form/ProducerForm";
 import Spinner from "@/components/spinner/Spinner";
 
 const ProducerDetail = () => {

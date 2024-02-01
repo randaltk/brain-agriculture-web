@@ -1,4 +1,4 @@
-import ProducerList from "@/components/ProducerList";
+import ProducerList from "@/components/producer-list/ProducerList";
 import { ProducerProvider } from "@/context/ProducerContext";
 
 const Producer = () => {

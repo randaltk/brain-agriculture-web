@@ -1,13 +1,13 @@
 "use client";
 
-import "./formStyles.css";
-import styles from "../app/page.module.css";
+import "../producer-form/formStyles.css";
+import styles from "../../app/page.module.css";
 import React, { useEffect, useState } from "react";
 import { Producer } from "@/interfaces";
 import { useProducer } from "@/context/ProducerContext";
 import { createProducer, deleteProducer, updateProducer } from "@/services/api";
 import Link from "next/link";
-import Spinner from "./spinner/Spinner";
+import Spinner from "../spinner/Spinner";
 
 const ProducerList = () => {
   const { producers, isLoading, getAllProducers } = useProducer();
