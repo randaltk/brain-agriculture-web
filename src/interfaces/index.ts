@@ -14,10 +14,9 @@ export interface Producer {
 }
 
 export interface Culture {
-    name: string;
-    area: number
-  }
-  
+  name: string;
+}
+
 export interface ProducerContextData {
   producers: Producer[];
   selectedProducer: Producer | null;
@@ -35,4 +34,5 @@ export interface ProducerProviderProps {
 
 export interface CreateProducerFormProps {
   onCreate: (formData: FormData) => void;
+  initialData?: Partial<Producer> | Producer;
 }

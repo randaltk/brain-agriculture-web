@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import { Producer } from "@/interfaces";
 import { useProducer } from "@/context/ProducerContext";
 import { createProducer, deleteProducer, updateProducer } from "@/services/api";
-
+import Link from "next/link";
 
 const ProducerList = () => {
   const { producers, isLoading, getAllProducers } = useProducer();
@@ -21,11 +21,6 @@ const ProducerList = () => {
     getAllProducers();
   };
 
-  const handleUpdate = async (id: number) => {
-    await updateProducer(id, FormData);
-    getAllProducers();
-  };
-
   const handleDelete = async (id: number) => {
     await deleteProducer(id);
     getAllProducers();
@@ -36,7 +31,10 @@ const ProducerList = () => {
         <p>Loading...</p>
       ) : (
         <div>
-          <h2>Produtores</h2>
+          <div>
+            <h2>Produtores</h2>
+          </div>
+
           <ul>
             {producers.map((producer: Producer, key: number) => (
               <table key={key} cellSpacing={60}>
@@ -59,9 +57,9 @@ const ProducerList = () => {
                     <td>{producer.state}</td>
                     <td>{producer.city}</td>
                     <td>
-                      <button onClick={() => handleUpdate(producer.id)}>
-                        Update
-                      </button>
+                      <Link href={`/producers/update?id=${producer.id}`}>
+                        <button>Update</button>
+                      </Link>
                     </td>
                     <td>
                       <button

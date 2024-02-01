@@ -8,7 +8,7 @@ import {
   fetchStatePieChart,
   fetchLandUsePieChart,
 } from "../../services/api";
-import styles from "./Dashboard.module.css";
+import "./Dashboard.css";
 
 interface DashboardProps {}
 
@@ -72,10 +72,10 @@ const Dashboard: React.FC<DashboardProps> = () => {
   }, []);
 
   return (
-    <div className={styles.dashboardContainer}>
-      <h4>Total de fazendas</h4>
+    <div className={"dashboardContainer"}>
       {totalFarmsData && (
-        <div className={styles.totalFarmsContainer}>
+        <>
+          <h4>Total de fazendas</h4>
           <Chart
             width={"400px"}
             height={"300px"}
@@ -109,6 +109,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
           />
 
           <h4>Gráfico de pizza por cultura</h4>
+
           <Chart
             width={"400px"}
             height={"300px"}
@@ -125,8 +126,8 @@ const Dashboard: React.FC<DashboardProps> = () => {
               title: "Culture Pie Chart",
             }}
           />
-        
-        <h4>Gráfico de pizza por estado</h4>
+
+          <h4>Gráfico de pizza por estado</h4>
           <Chart
             width={"400px"}
             height={"300px"}
@@ -161,7 +162,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
               title: "Land Use Pie Chart",
             }}
           />
-        </div>
+        </>
       )}
     </div>
   );

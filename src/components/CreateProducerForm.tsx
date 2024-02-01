@@ -1,14 +1,14 @@
 "use client";
 
 import "./formStyles.css";
-import styles from "../app/page.module.css";
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { CreateProducerFormProps, Culture, Producer } from "@/interfaces";
 
 const CreateProducerForm: React.FC<CreateProducerFormProps> = ({
   onCreate,
+  initialData,
 }) => {
-  const initialCulture: Culture = { name: "", area: 0 };
+  const initialCulture: Culture = { name: "" };
   const initialProducer: Producer = {
     id: 0,
     cpfCnpj: "",
@@ -24,6 +24,13 @@ const CreateProducerForm: React.FC<CreateProducerFormProps> = ({
 
   const [formData, setFormData] = useState<Producer>(initialProducer);
 
+  useEffect(() => {
+    setFormData((prevData) => ({
+      ...prevData,
+      ...initialData,
+      id: initialData?.id || 0,
+    }));
+  }, [initialData]);
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -77,7 +84,6 @@ const CreateProducerForm: React.FC<CreateProducerFormProps> = ({
 
     formData.cultures.forEach((culture, index) => {
       formDataToSend.append(`cultures[${index}].name`, culture.name);
-      formDataToSend.append(`cultures[${index}].area`, culture.area.toString());
     });
 
     onCreate(formDataToSend);
@@ -133,11 +139,21 @@ const CreateProducerForm: React.FC<CreateProducerFormProps> = ({
       </label>
 
       <label>
+        Area Total
+        <input
+          type="number"
+          name="totalArea"
+          value={formData.totalArea}
+          onChange={handleInputChange}
+        />
+      </label>
+ 
+      <label>
         Area Cultivavel
         <input
-          type="text"
+          type="number"
           name="cultivableArea"
-          value={formData.city}
+          value={formData.cultivableArea}
           onChange={handleInputChange}
         />
       </label>
@@ -145,9 +161,9 @@ const CreateProducerForm: React.FC<CreateProducerFormProps> = ({
       <label>
         Area de Vegetação
         <input
-          type="text"
+          type="number"
           name="vegetationArea"
-          value={formData.city}
+          value={formData.vegetationArea}
           onChange={handleInputChange}
         />
       </label>
@@ -164,15 +180,7 @@ const CreateProducerForm: React.FC<CreateProducerFormProps> = ({
               onChange={(e) => handleCultureChange(index, e)}
             />
           </label>
-          <label>
-            Área da Cultura:
-            <input
-              type="number"
-              name={`cultures[${index}].area`}
-              value={culture.area}
-              onChange={(e) => handleCultureChange(index, e)}
-            />
-          </label>
+       
           <button type="button" onClick={() => handleRemoveCulture(index)}>
             Remover Cultura
           </button>
