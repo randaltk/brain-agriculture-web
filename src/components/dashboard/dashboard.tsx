@@ -9,6 +9,7 @@ import {
   fetchLandUsePieChart,
 } from "../../services/api";
 import "./Dashboard.css";
+import Spinner from "../spinner/Spinner";
 
 interface DashboardProps {}
 
@@ -80,7 +81,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
             width={"400px"}
             height={"300px"}
             chartType="BarChart"
-            loader={<div>Loading Chart</div>}
+            loader={<div><Spinner/></div>}
             data={[
               ["Metric", "Value"],
               ["Total Farms", totalFarmsData.totalFarms],
@@ -96,7 +97,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
             width={"400px"}
             height={"300px"}
             chartType="BarChart"
-            loader={<div>Loading Chart</div>}
+            loader={<div><Spinner/></div>}
             data={[
               ["Metric", "Value"],
               ["Total Area", totalFarmsData.totalArea],
@@ -114,7 +115,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
             width={"400px"}
             height={"300px"}
             chartType="PieChart"
-            loader={<div>Loading Chart</div>}
+            loader={<div><Spinner/></div>}
             data={[
               ["Culture", "Count"],
               ...culturePieChartData.map(({ culture, count }) => [
@@ -132,7 +133,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
             width={"400px"}
             height={"300px"}
             chartType="PieChart"
-            loader={<div>Loading Chart</div>}
+            loader={<div><Spinner/></div>}
             data={[
               ["State", "Count"],
               ...statePieChartData.map(({ state, count }) => [
@@ -150,7 +151,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
             width={"400px"}
             height={"300px"}
             chartType="PieChart"
-            loader={<div>Loading Chart</div>}
+            loader={<div><Spinner/></div>}
             data={[
               ["Land Use", "Count"],
               ...landUsePieChartData.map(({ category, area }) => [

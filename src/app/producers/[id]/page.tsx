@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Producer } from "@/interfaces";
 import { getProducerById, updateProducer } from "@/services/api";
 import CreateProducerForm from "@/components/CreateProducerForm";
+import Spinner from "@/components/spinner/Spinner";
 
 const ProducerDetail = () => {
   const router = useRouter();
@@ -36,9 +37,8 @@ const ProducerDetail = () => {
   };
 
   if (!formData.name) {
-    return <p>Loading...</p>;
+    return <Spinner/>
   }
-
   return (
     <div className={styles.main}>
       <div>

@@ -7,6 +7,7 @@ import { Producer } from "@/interfaces";
 import { useProducer } from "@/context/ProducerContext";
 import { createProducer, deleteProducer, updateProducer } from "@/services/api";
 import Link from "next/link";
+import Spinner from "./spinner/Spinner";
 
 const ProducerList = () => {
   const { producers, isLoading, getAllProducers } = useProducer();
@@ -28,7 +29,9 @@ const ProducerList = () => {
   return (
     <main className={styles.main}>
       {isLoading ? (
-        <p>Loading...</p>
+        <>
+          <Spinner />
+        </>
       ) : (
         <div>
           <div>
