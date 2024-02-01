@@ -1,9 +1,10 @@
 import axios, { AxiosInstance } from "axios";
 
 const API_BASE_URL =
-  process.env.NODE_ENV === "production"
-    ? "https://your-production-api.com"
-    : "http://localhost:3000";
+  process.env.NODE_ENV === 'production'
+    ? process.env.NEXT_PUBLIC_API_BASE_URL
+    : 'http://localhost:3000';
+
 
 const api: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,

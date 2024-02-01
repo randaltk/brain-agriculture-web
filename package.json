@@ -6,10 +6,13 @@
     "dev": "next dev -p 5000",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "build:production": "cross-env NODE_ENV=production next build",
+    "start:production": "cross-env NODE_ENV=production next start"
   },
   "dependencies": {
     "axios": "^1.6.7",
+    "cross-env": "^7.0.3",
     "next": "^14.1.0",
     "react": "^18",
     "react-dom": "^18",
