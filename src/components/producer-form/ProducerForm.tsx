@@ -3,6 +3,7 @@
 import "./formStyles.css";
 import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { CreateProducerFormProps, Culture, Producer } from "@/interfaces";
+import { validateCPFAndCNPJ } from "@/validations";
 
 const CreateProducerForm: React.FC<CreateProducerFormProps> = ({
   onCreate,
@@ -23,7 +24,12 @@ const CreateProducerForm: React.FC<CreateProducerFormProps> = ({
   };
 
   const [formData, setFormData] = useState<Producer>(initialProducer);
-
+  const [validationErrors, setValidationErrors] = useState<{
+    [key: string]: string;
+  }>({});
+  const [apiErrors, setApiErrors] = useState<string[]>([]);
+  console.log("error", validationErrors);
+  console.log("apierror", apiErrors);
   useEffect(() => {
     setFormData((prevData) => ({
       ...prevData,
@@ -31,13 +37,21 @@ const CreateProducerForm: React.FC<CreateProducerFormProps> = ({
       id: initialData?.id || 0,
     }));
   }, [initialData]);
+
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
+
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
+    }));
+
+    const isCPFOrCNPJValid = validateCPFAndCNPJ(value);
+    setValidationErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: isCPFOrCNPJValid ? "" : "CPF ou CNPJ inválido",
     }));
   };
 
@@ -46,7 +60,7 @@ const CreateProducerForm: React.FC<CreateProducerFormProps> = ({
     e: ChangeEvent<HTMLInputElement>
   ) => {
     const updatedCultures = [...formData.cultures];
-    // updatedCultures[index][e.target.name] = e.target.value;
+    updatedCultures[index] = { name: e.target.value };
     setFormData((prevData) => ({
       ...prevData,
       cultures: updatedCultures,
@@ -69,9 +83,21 @@ const CreateProducerForm: React.FC<CreateProducerFormProps> = ({
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (
+      (formData.cpfCnpj.length === 11 || formData.cpfCnpj.length === 14) &&
+      !validateCPFAndCNPJ(formData.cpfCnpj)
+    ) {
+      setValidationErrors((prevErrors) => ({
+        ...prevErrors,
+        name: prevErrors.name,
+        cpfCnpj:
+          formData.cpfCnpj.length === 11 ? "CPF inválido" : "CNPJ inválido",
+      }));
+      return;
+    }
     const formDataToSend = new FormData();
     formDataToSend.append("cpfCnpj", formData.cpfCnpj);
     formDataToSend.append("name", formData.name);
@@ -86,7 +112,20 @@ const CreateProducerForm: React.FC<CreateProducerFormProps> = ({
       formDataToSend.append(`cultures[${index}].name`, culture.name);
     });
 
-    onCreate(formDataToSend);
+    try {
+      await onCreate(formDataToSend);
+
+      setApiErrors([]);
+    } catch (error: any) {
+      if (error.response && error.response.data.message) {
+        setApiErrors((prevErrors) => [
+          ...prevErrors,
+          error.response.data.message,
+        ]);
+      } else {
+        console.error("API request failed:", error);
+      }
+    }
   };
 
   return (
@@ -98,6 +137,7 @@ const CreateProducerForm: React.FC<CreateProducerFormProps> = ({
           name="name"
           value={formData.name}
           onChange={handleInputChange}
+          maxLength={50}
         />
       </label>
       <label>
@@ -108,7 +148,11 @@ const CreateProducerForm: React.FC<CreateProducerFormProps> = ({
           value={formData.cpfCnpj}
           onChange={handleInputChange}
         />
+        {validationErrors.cpfCnpj && (
+          <div className="error-message">{validationErrors.cpfCnpj}</div>
+        )}
       </label>
+
       <label>
         Nome da Fazenda
         <input
@@ -116,6 +160,7 @@ const CreateProducerForm: React.FC<CreateProducerFormProps> = ({
           name="farmName"
           value={formData.farmName}
           onChange={handleInputChange}
+          maxLength={50}
         />
       </label>
       <label>
@@ -147,7 +192,7 @@ const CreateProducerForm: React.FC<CreateProducerFormProps> = ({
           onChange={handleInputChange}
         />
       </label>
- 
+
       <label>
         Area Cultivavel
         <input
@@ -180,7 +225,7 @@ const CreateProducerForm: React.FC<CreateProducerFormProps> = ({
               onChange={(e) => handleCultureChange(index, e)}
             />
           </label>
-       
+
           <button type="button" onClick={() => handleRemoveCulture(index)}>
             Remover Cultura
           </button>
@@ -193,6 +238,11 @@ const CreateProducerForm: React.FC<CreateProducerFormProps> = ({
       <div>
         <button type="submit">Criar Produtor</button>
       </div>
+      {apiErrors.map((error, index) => (
+        <div key={index} className="error-message">
+          {error}
+        </div>
+      ))}
     </form>
   );
 };

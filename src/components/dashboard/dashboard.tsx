@@ -8,7 +8,7 @@ import {
   fetchStatePieChart,
   fetchLandUsePieChart,
 } from "../../services/api";
-import "./Dashboard.css";
+import "./dashboard.css";
 import Spinner from "../spinner/Spinner";
 
 interface DashboardProps {}
