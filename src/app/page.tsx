@@ -1,4 +1,6 @@
+"use client";
 
+import Dashboard from "@/components/dashboard/dashboard";
 import "./globals.css";
 import styles from "./page.module.css";
 
@@ -8,6 +10,8 @@ export default function Home() {
       <div className={styles.description}>
         <h1>Brain Agriculture</h1>
       </div>
+
+      <Dashboard />
     </main>
   );
 }

@@ -36,7 +36,7 @@ const ProducerList = () => {
         <p>Loading...</p>
       ) : (
         <div>
-          <h2>Producer List</h2>
+          <h2>Produtores</h2>
           <ul>
             {producers.map((producer: Producer, key: number) => (
               <table key={key} cellSpacing={60}>

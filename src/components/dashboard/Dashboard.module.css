@@ -1,0 +1,17 @@
+/* Dashboard.module.css */
+
+.dashboardContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .totalFarmsContainer {
+    background-color: #f0f0f0;
+    padding: 10px;
+    margin-bottom: 20px;
+  }
+  
+  /* Add more styles as needed */
+  

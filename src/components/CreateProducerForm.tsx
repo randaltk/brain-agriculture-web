@@ -1,6 +1,7 @@
 "use client";
 
-import './formStyles.css'
+import "./formStyles.css";
+import styles from "../app/page.module.css";
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import { CreateProducerFormProps, Culture, Producer } from "@/interfaces";
 
@@ -74,14 +75,11 @@ const CreateProducerForm: React.FC<CreateProducerFormProps> = ({
     formDataToSend.append("cultivableArea", formData.cultivableArea.toString());
     formDataToSend.append("vegetationArea", formData.vegetationArea.toString());
 
-    // Assuming 'cultures' is an array of objects with 'name' and 'area' properties
     formData.cultures.forEach((culture, index) => {
       formDataToSend.append(`cultures[${index}].name`, culture.name);
       formDataToSend.append(`cultures[${index}].area`, culture.area.toString());
     });
 
-    // Now you have the formDataToSend ready with all the necessary fields
-    // Pass it to your onCreate function
     onCreate(formDataToSend);
   };
 
