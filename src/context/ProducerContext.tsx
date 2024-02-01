@@ -1,24 +1,43 @@
-import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
-import api from '../services/api';
-import { Producer, ProducerContextData, ProducerProviderProps } from '@/app/interfaces';
+"use client";
 
+import React, {
+  createContext,
+  useContext,
+  ReactNode,
+  useState,
+  useEffect,
+} from "react";
 
-const ProducerContext = createContext<ProducerContextData | undefined>(undefined);
+import { useRouter } from 'next/navigation';
 
-export const ProducerProvider: React.FC<ProducerProviderProps> = ({ children }) => {
+import api from "../services/api";
+import {
+  Producer,
+  ProducerContextData,
+  ProducerProviderProps,
+} from "@/interfaces";
+
+const ProducerContext = createContext<ProducerContextData | undefined>(
+  undefined
+);
+
+export const ProducerProvider: React.FC<ProducerProviderProps> = ({
+  children,
+}) => {
   const router = useRouter();
   const [producers, setProducers] = useState<Producer[]>([]);
-  const [selectedProducer, setSelectedProducer] = useState<Producer | null>(null);
+  const [selectedProducer, setSelectedProducer] = useState<Producer | null>(
+    null
+  );
   const [isLoading, setIsLoading] = useState(false);
 
   const getAllProducers = async () => {
     try {
       setIsLoading(true);
-      const response = await api.get('/producers');
+      const response = await api.get("/producers");
       setProducers(response.data);
     } catch (error) {
-      console.error('Error fetching producers', error);
+      console.error("Error fetching producers", error);
     } finally {
       setIsLoading(false);
     }
@@ -30,7 +49,7 @@ export const ProducerProvider: React.FC<ProducerProviderProps> = ({ children }) 
       const response = await api.get(`/producers/${id}`);
       setSelectedProducer(response.data);
     } catch (error) {
-      console.error('Error fetching producer by id', error);
+      console.error("Error fetching producer by id", error);
     } finally {
       setIsLoading(false);
     }
@@ -39,11 +58,11 @@ export const ProducerProvider: React.FC<ProducerProviderProps> = ({ children }) 
   const createProducer = async (producer: Producer) => {
     try {
       setIsLoading(true);
-      await api.post('/producers', producer);
+      await api.post("/producers", producer);
       await getAllProducers();
-      router.push('/'); 
+      router.push("/");
     } catch (error) {
-      console.error('Error creating producer', error);
+      console.error("Error creating producer", error);
     } finally {
       setIsLoading(false);
     }
@@ -54,9 +73,9 @@ export const ProducerProvider: React.FC<ProducerProviderProps> = ({ children }) 
       setIsLoading(true);
       await api.put(`/producers/${id}`, producer);
       await getAllProducers();
-      router.push('/'); 
+      router.push("/");
     } catch (error) {
-      console.error('Error updating producer', error);
+      console.error("Error updating producer", error);
     } finally {
       setIsLoading(false);
     }
@@ -68,7 +87,7 @@ export const ProducerProvider: React.FC<ProducerProviderProps> = ({ children }) 
       await api.delete(`/producers/${id}`);
       await getAllProducers();
     } catch (error) {
-      console.error('Error deleting producer', error);
+      console.error("Error deleting producer", error);
     } finally {
       setIsLoading(false);
     }
@@ -89,13 +108,17 @@ export const ProducerProvider: React.FC<ProducerProviderProps> = ({ children }) 
     deleteProducer,
   };
 
-  return <ProducerContext.Provider value={contextValue}>{children}</ProducerContext.Provider>;
+  return (
+    <ProducerContext.Provider value={contextValue}>
+      {children}
+    </ProducerContext.Provider>
+  );
 };
 
 export const useProducer = () => {
   const context = useContext(ProducerContext);
   if (!context) {
-    throw new Error('useProducer must be used within a ProducerProvider');
+    throw new Error("useProducer must be used within a ProducerProvider");
   }
   return context;
 };
