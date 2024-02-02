@@ -1,6 +1,5 @@
 "use client";
 
-
 import Dashboard from "@/components/dashboard/Dashboard";
 import "./globals.css";
 import styles from "./page.module.css";

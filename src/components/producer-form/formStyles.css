@@ -103,3 +103,19 @@ select {
 ul {
   overflow: hidden;
 }
+
+@media (max-width: 768px) {
+  table th,
+  table td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+    max-width: 800px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-height: 50px;
+    display: flex;
+    align-items: center;
+  }
+}
