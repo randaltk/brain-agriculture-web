@@ -1,18 +1,39 @@
-"use client";
+"use client"
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import "./sidebarStyles.css";
 
 const Sidebar = () => {
   const [isModalOpen, setModalOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkScreenWidth = () => {
+      setIsMobile(window.innerWidth <= 768); // Adapte conforme necessário
+    };
+
+    // Verificar a largura da tela ao montar o componente
+    checkScreenWidth();
+
+    // Adicionar um listener para verificar alterações na largura da tela
+    window.addEventListener("resize", checkScreenWidth);
+
+    // Remover o listener ao desmontar o componente
+    return () => {
+      window.removeEventListener("resize", checkScreenWidth);
+    };
+  }, []);
 
   const toggleModal = () => {
     setModalOpen(!isModalOpen);
   };
 
   const handleLinkClick = (link: string) => {
-    toggleModal();
+    // Fechar o modal apenas em dispositivos móveis
+    if (isMobile) {
+      toggleModal();
+    }
     window.location.href = link;
   };
 
@@ -31,14 +52,14 @@ const Sidebar = () => {
         </div>
       </header>
 
-      {isModalOpen && (
+      {(isMobile && isModalOpen) && (
         <div className="modal">
           <div className="modal-content">
             <div className="modal-links">
               <span onClick={() => handleLinkClick("/producers")}>
                 Produtores
               </span>
-              <br/>
+              <br />
               <span onClick={() => handleLinkClick("/register")}>
                 Cadastrar
               </span>

@@ -6,7 +6,7 @@ import { createProducer } from "@/services/api";
 const Register = () => {
   return (
     <>
-      <div>
+      <div style={{ paddingTop: "5em", paddingLeft: "5.3em",paddingBottom:'1em' }}>
         <h2>Cadastrar</h2>
       </div>
 

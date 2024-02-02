@@ -62,7 +62,7 @@ thead {
   grid-template-columns: repeat(
     8,
     1fr
-  ); /* Adjust the number of columns based on your table structure */
+  );
   border-collapse: collapse;
   width: 100%;
 }
