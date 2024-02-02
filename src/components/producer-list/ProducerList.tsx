@@ -45,7 +45,6 @@ const ProducerList = () => {
           <div>
             <h2>Produtores</h2>
           </div>
-
           <ul>
             {producers.map((producer: Producer, key: number) => (
               <table key={key} cellSpacing={60}>
@@ -57,6 +56,10 @@ const ProducerList = () => {
                     <th>CPF/CNPJ</th>
                     <th>Estado</th>
                     <th>Cidade</th>
+                    <th>Area Total</th>
+                    <th>Area de Cultivo</th>
+                    <th>Area de Vegetação</th>
+                    <th>Culturas</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -67,6 +70,14 @@ const ProducerList = () => {
                     <td>{producer.cpfCnpj}</td>
                     <td>{producer.state}</td>
                     <td>{producer.city}</td>
+                    <td>{producer.totalArea}</td>
+                    <td>{producer.cultivableArea}</td>
+                    <td>{producer.vegetationArea}</td>
+                    <td>
+                      {producer.cultures.map((culture, key: number) => (
+                        <div key={key}>{culture.name}</div>
+                      ))}
+                    </td>
                     <td>
                       <Link href={`/producers/update?id=${producer.id}`}>
                         <button>Update</button>

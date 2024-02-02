@@ -45,33 +45,40 @@ div {
   margin-bottom: 20px;
 }
 
-button[type="button"] {
+button[id="remove"] {
   background-color: #f44336;
 }
 
-button[type="button"]:hover {
+button[type="remove"]:hover {
   background-color: #d32f2f;
-}
-table {
-  border-collapse: collapse;
-  width: 100%;
-  margin-bottom: 20px;
 }
 
 thead {
   background-color: #f2f2f2;
 }
 
-th,
-td {
+.table {
+  display: grid;
+  grid-template-columns: repeat(
+    8,
+    1fr
+  ); /* Adjust the number of columns based on your table structure */
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.table th,
+.table td {
   padding: 12px;
   text-align: left;
   border: 1px solid #ddd;
   max-width: 800px;
-
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+  max-height: 50px;
+  display: flex;
+  align-items: center;
 }
 
 button {
@@ -92,4 +99,7 @@ select {
   border-radius: 5px;
   background-color: #fff;
   font-size: 16px;
+}
+ul {
+  overflow: hidden;
 }

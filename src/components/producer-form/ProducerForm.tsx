@@ -240,7 +240,7 @@ const CreateProducerForm: React.FC<CreateProducerFormProps> = ({
     if (initialData && initialData.id !== undefined) {
       return (
         <>
-          <button onClick={handleSubmitUpdate}>Atualizar Produtor</button>
+          <button  onClick={handleSubmitUpdate}>Atualizar Produtor</button>
         </>
       );
     } else {
@@ -359,14 +359,14 @@ const CreateProducerForm: React.FC<CreateProducerFormProps> = ({
             />
           </label>
 
-          <button type="button" onClick={() => handleRemoveCulture(culture)}>
+          <button id='remove' type="button" onClick={() => handleRemoveCulture(culture)}>
             Remover Cultura
           </button>
         </div>
       ))}
 
       <div>
-        <button onClick={handleAddCulture}>Adicionar Cultura</button>
+        <button id='add' type="button" onClick={handleAddCulture}>Adicionar Cultura</button>
       </div>
       <div>{renderButtons()}</div>
       {apiErrors.map((error, index) => (
