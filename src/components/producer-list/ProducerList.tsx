@@ -5,26 +5,34 @@ import styles from "../../app/page.module.css";
 import React, { useEffect, useState } from "react";
 import { Producer } from "@/interfaces";
 import { useProducer } from "@/context/ProducerContext";
-import { createProducer, deleteProducer, updateProducer } from "@/services/api";
+import { deleteProducer } from "@/services/api";
 import Link from "next/link";
 import Spinner from "../spinner/Spinner";
 
 const ProducerList = () => {
   const { producers, isLoading, getAllProducers } = useProducer();
-  const [formData, setFormData] = useState<Partial<Producer>>({});
+  const [apiErrors, setApiErrors] = useState<string[]>([]);
+  const [successMessage, setSuccessMessage] = useState<string>("");
 
   useEffect(() => {
     getAllProducers();
   }, []);
 
-  const handleCreate = async () => {
-    await createProducer(formData);
-    getAllProducers();
-  };
-
   const handleDelete = async (id: number) => {
-    await deleteProducer(id);
-    getAllProducers();
+    try {
+      await deleteProducer(id);
+
+      setApiErrors([]);
+      setSuccessMessage("Produtor excluído com sucesso!");
+
+      await getAllProducers();
+    } catch (error: any) {
+      if (error.response && error.response.data.message) {
+        setApiErrors([error.response.data.message]);
+      } else {
+        console.error("API request failed:", error);
+      }
+    }
   };
   return (
     <main className={styles.main}>
@@ -77,6 +85,14 @@ const ProducerList = () => {
               </table>
             ))}
           </ul>
+          {successMessage && (
+            <div className="success-message">{successMessage}</div>
+          )}
+          {apiErrors.map((error, index) => (
+            <div key={index} className="error-message">
+              {error}
+            </div>
+          ))}
         </div>
       )}
     </main>

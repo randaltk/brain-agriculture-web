@@ -32,27 +32,19 @@ const ProducerDetail = () => {
   const handleUpdate = async () => {
     if (id) {
       await updateProducer(id, formData);
-      router.push("/producers");
     }
   };
 
   if (!formData.name) {
-    return <Spinner/>
+    return <Spinner />;
   }
   return (
-    <div className={styles.main}>
+    <div>
       <div>
         <h2>Editar produtor {formData.id}</h2>
       </div>
 
-      <CreateProducerForm
-        onCreate={(formData) => {
-          // Handle update logic here
-        }}
-        initialData={formData}
-      />
-
-      <button onClick={handleUpdate}>Update Producer</button>
+      <CreateProducerForm onCreate={handleUpdate} initialData={formData} />
     </div>
   );
 };

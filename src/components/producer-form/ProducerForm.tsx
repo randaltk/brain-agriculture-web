@@ -4,6 +4,7 @@ import "./formStyles.css";
 import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { CreateProducerFormProps, Culture, Producer } from "@/interfaces";
 import { validateCPFAndCNPJ } from "@/validations";
+import { fetchCities, fetchStates, updateProducer } from "@/services/api";
 
 const CreateProducerForm: React.FC<CreateProducerFormProps> = ({
   onCreate,
@@ -28,15 +29,44 @@ const CreateProducerForm: React.FC<CreateProducerFormProps> = ({
     [key: string]: string;
   }>({});
   const [apiErrors, setApiErrors] = useState<string[]>([]);
-  console.log("error", validationErrors);
-  console.log("apierror", apiErrors);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [states, setStates] = useState([]);
+  const [cities, setCities] = useState([]);
+
   useEffect(() => {
     setFormData((prevData) => ({
       ...prevData,
       ...initialData,
+      cultures: initialData?.cultures || [initialCulture],
       id: initialData?.id || 0,
     }));
   }, [initialData]);
+  useEffect(() => {
+    const fetchStatesData = async () => {
+      try {
+        const statesData = await fetchStates();
+        setStates(statesData);
+      } catch (error) {
+        console.error("Error fetching states:", error);
+      }
+    };
+
+    fetchStatesData();
+  }, []);
+  const handleStateChange = async (selectedState: any) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      state: selectedState,
+      city: "",
+    }));
+
+    try {
+      const citiesData = await fetchCities(selectedState);
+      setCities(citiesData);
+    } catch (error) {
+      console.error("Error fetching cities:", error);
+    }
+  };
 
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -66,21 +96,27 @@ const CreateProducerForm: React.FC<CreateProducerFormProps> = ({
       cultures: updatedCultures,
     }));
   };
-
   const handleAddCulture = () => {
-    setFormData((prevData) => ({
-      ...prevData,
-      cultures: [...prevData.cultures, { ...initialCulture }],
-    }));
+    setFormData((prevData) => {
+      const newCultures = [...prevData.cultures, { ...initialCulture }];
+      return {
+        ...prevData,
+        cultures: newCultures,
+      };
+    });
   };
 
-  const handleRemoveCulture = (index: number) => {
-    const updatedCultures = [...formData.cultures];
-    updatedCultures.splice(index, 1);
-    setFormData((prevData) => ({
-      ...prevData,
-      cultures: updatedCultures,
-    }));
+  const handleRemoveCulture = (cultureToRemove: Culture) => {
+    setFormData((prevData) => {
+      const updatedCultures = prevData.cultures.filter(
+        (culture) => culture !== cultureToRemove
+      );
+
+      return {
+        ...prevData,
+        cultures: updatedCultures,
+      };
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -98,6 +134,7 @@ const CreateProducerForm: React.FC<CreateProducerFormProps> = ({
       }));
       return;
     }
+
     const formDataToSend = new FormData();
     formDataToSend.append("cpfCnpj", formData.cpfCnpj);
     formDataToSend.append("name", formData.name);
@@ -116,6 +153,7 @@ const CreateProducerForm: React.FC<CreateProducerFormProps> = ({
       await onCreate(formDataToSend);
 
       setApiErrors([]);
+      setSuccessMessage("Produtor criado com sucesso!");
     } catch (error: any) {
       if (error.response && error.response.data.message) {
         setApiErrors((prevErrors) => [
@@ -128,6 +166,87 @@ const CreateProducerForm: React.FC<CreateProducerFormProps> = ({
     }
   };
 
+  const handleSubmitUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (
+      (formData.cpfCnpj.length === 11 || formData.cpfCnpj.length === 14) &&
+      !validateCPFAndCNPJ(formData.cpfCnpj)
+    ) {
+      setValidationErrors((prevErrors) => ({
+        ...prevErrors,
+        name: prevErrors.name,
+        cpfCnpj:
+          formData.cpfCnpj.length === 11 ? "CPF inválido" : "CNPJ inválido",
+      }));
+      return;
+    }
+
+    const formDataToUpdate = new FormData();
+    formDataToUpdate.append("cpfCnpj", formData.cpfCnpj);
+    formDataToUpdate.append("name", formData.name);
+    formDataToUpdate.append("farmName", formData.farmName);
+    formDataToUpdate.append("city", formData.city);
+    formDataToUpdate.append("state", formData.state);
+    formDataToUpdate.append("totalArea", formData.totalArea.toString());
+    formDataToUpdate.append(
+      "cultivableArea",
+      formData.cultivableArea.toString()
+    );
+    formDataToUpdate.append(
+      "vegetationArea",
+      formData.vegetationArea.toString()
+    );
+
+    formData.cultures.forEach((culture, index) => {
+      formDataToUpdate.append(`cultures[${index}].name`, culture.name);
+    });
+
+    if (formData.cultures.length === 0) {
+      formDataToUpdate.append("cultures[0].name", "");
+    }
+
+    try {
+      if (initialData?.id) {
+        const updatedData = await updateProducer(
+          initialData.id,
+          formDataToUpdate
+        );
+
+        setFormData((prevData) => ({
+          ...prevData,
+          ...updatedData,
+          cultures: updatedData?.cultures || [initialCulture],
+        }));
+
+        setApiErrors([]);
+        setSuccessMessage("Produtor atualizado com sucesso!");
+      } else {
+        console.error("No ID found for update.");
+      }
+    } catch (error: any) {
+      if (error.response && error.response.data.message) {
+        setApiErrors((prevErrors) => [
+          ...prevErrors,
+          error.response.data.message,
+        ]);
+      } else {
+        console.error("API request failed:", error);
+      }
+    }
+  };
+
+  const renderButtons = () => {
+    if (initialData && initialData.id !== undefined) {
+      return (
+        <>
+          <button onClick={handleSubmitUpdate}>Atualizar Produtor</button>
+        </>
+      );
+    } else {
+      return <button type="submit">Criar Produtor</button>;
+    }
+  };
   return (
     <form onSubmit={handleSubmit} className="form-container">
       <label>
@@ -165,22 +284,36 @@ const CreateProducerForm: React.FC<CreateProducerFormProps> = ({
       </label>
       <label>
         Estado
-        <input
-          type="text"
+        <select
           name="state"
           value={formData.state}
-          onChange={handleInputChange}
-        />
+          onChange={(e) => handleStateChange(e.target.value)}
+        >
+          <option value="">Select State</option>
+          {states.map((state) => (
+            <option key={state} value={state}>
+              {state}
+            </option>
+          ))}
+        </select>
       </label>
 
       <label>
         Cidade
-        <input
-          type="text"
+        <select
           name="city"
           value={formData.city}
-          onChange={handleInputChange}
-        />
+          onChange={(e) =>
+            setFormData((prevData) => ({ ...prevData, city: e.target.value }))
+          }
+        >
+          <option value="">Select City</option>
+          {cities.map((city) => (
+            <option key={city} value={city}>
+              {city}
+            </option>
+          ))}
+        </select>
       </label>
 
       <label>
@@ -226,7 +359,7 @@ const CreateProducerForm: React.FC<CreateProducerFormProps> = ({
             />
           </label>
 
-          <button type="button" onClick={() => handleRemoveCulture(index)}>
+          <button type="button" onClick={() => handleRemoveCulture(culture)}>
             Remover Cultura
           </button>
         </div>
@@ -235,14 +368,15 @@ const CreateProducerForm: React.FC<CreateProducerFormProps> = ({
       <div>
         <button onClick={handleAddCulture}>Adicionar Cultura</button>
       </div>
-      <div>
-        <button type="submit">Criar Produtor</button>
-      </div>
+      <div>{renderButtons()}</div>
       {apiErrors.map((error, index) => (
         <div key={index} className="error-message">
           {error}
         </div>
       ))}
+      {successMessage && (
+        <div className="success-message">{successMessage}</div>
+      )}
     </form>
   );
 };

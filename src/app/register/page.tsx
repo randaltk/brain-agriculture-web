@@ -9,9 +9,7 @@ const Register = () => {
       <div>
         <h2>Cadastrar</h2>
       </div>
-      <CreateProducerForm
-        onCreate={createProducer}
-      />
+      <CreateProducerForm onCreate={createProducer} />
     </>
   );
 };
