@@ -47,7 +47,7 @@ const ProducerList = () => {
           </div>
           <ul>
             {producers.map((producer: Producer, key: number) => (
-              <table key={key} cellSpacing={60}>
+              <table key={key} cellSpacing={20}>
                 <thead>
                   <tr>
                     <th>Id</th>
