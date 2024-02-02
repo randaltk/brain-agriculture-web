@@ -86,6 +86,7 @@ const ProducerList = () => {
                     <td>
                       <button
                         type="button"
+                        id="remove"
                         onClick={() => handleDelete(producer.id)}
                       >
                         Delete
