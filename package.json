@@ -8,10 +8,10 @@
     "start": "next start",
     "lint": "next lint",
     "build:production": "cross-env NODE_ENV=production next build",
-    "start:production": "cross-env NODE_ENV=production next start"
+    "start:production": "cross-env NODE_ENV=production next start",
+    "jest": "test"
   },
   "dependencies": {
-
     "axios": "^1.6.7",
     "cpf-cnpj-validator": "^1.0.3",
     "cross-env": "^7.0.3",
@@ -21,11 +21,17 @@
     "react-google-charts": "^4.0.1"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.4.2",
+    "@testing-library/react": "^14.2.1",
+    "@types/jest": "^29.5.12",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.1.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5"
   }
 }

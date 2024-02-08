@@ -5,12 +5,12 @@ import styles from "../../app/page.module.css";
 import React, { useEffect, useState } from "react";
 import { Producer } from "@/interfaces";
 import { useProducer } from "@/context/ProducerContext";
-import { deleteProducer } from "@/services/api";
+
 import Link from "next/link";
 import Spinner from "../spinner/Spinner";
 
 const ProducerList = () => {
-  const { producers, isLoading, getAllProducers } = useProducer();
+  const { producers, isLoading, getAllProducers,deleteProducer } = useProducer();
   const [apiErrors, setApiErrors] = useState<string[]>([]);
   const [successMessage, setSuccessMessage] = useState<string>("");
 

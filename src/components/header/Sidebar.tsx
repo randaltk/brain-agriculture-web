@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -10,16 +10,13 @@ const Sidebar = () => {
 
   useEffect(() => {
     const checkScreenWidth = () => {
-      setIsMobile(window.innerWidth <= 768); // Adapte conforme necessário
+      setIsMobile(window.innerWidth <= 768);
     };
 
-    // Verificar a largura da tela ao montar o componente
     checkScreenWidth();
 
-    // Adicionar um listener para verificar alterações na largura da tela
     window.addEventListener("resize", checkScreenWidth);
 
-    // Remover o listener ao desmontar o componente
     return () => {
       window.removeEventListener("resize", checkScreenWidth);
     };
@@ -30,7 +27,6 @@ const Sidebar = () => {
   };
 
   const handleLinkClick = (link: string) => {
-    // Fechar o modal apenas em dispositivos móveis
     if (isMobile) {
       toggleModal();
     }
@@ -52,7 +48,7 @@ const Sidebar = () => {
         </div>
       </header>
 
-      {(isMobile && isModalOpen) && (
+      {isMobile && isModalOpen && (
         <div className="modal">
           <div className="modal-content">
             <div className="modal-links">
